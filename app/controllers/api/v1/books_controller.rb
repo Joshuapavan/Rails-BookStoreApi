@@ -13,9 +13,10 @@ class Api::V1::BooksController < ApplicationController
 
   # GET /books/1
   def show
+    book = Representers::BookRepresenter.new(@book)
     render json:{
       message: "Rendered the book with the id #{params[:id]}",
-      book: @book
+      book: book.as_json
     }, status: :ok
   end
 
@@ -24,9 +25,10 @@ class Api::V1::BooksController < ApplicationController
     @book = Book.new(book_params)
 
     if @book.save
+      book = Representers::BookRepresenter.new(@book)
       render json:{
         message: "Created a new book successfully.",
-        book: @book
+        book: book.as_json
       }, status: :created
     else
       render json:{
@@ -39,9 +41,10 @@ class Api::V1::BooksController < ApplicationController
   # PATCH/PUT /books/1
   def update
     if @book.update(book_params)
+      book = Representers::BookRepresenter.new(@book)
       render json: {
         message: "Successfully updated the book with the id #{params[:id]}",
-        book: @book
+        book: book.as_json
       }, status: :ok
     else
       render json:{
